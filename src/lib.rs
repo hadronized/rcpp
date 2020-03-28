@@ -1,24 +1,8 @@
-//! Preprocessor parser.
+//! The C Preprocessor.
 //!
-//! The preprocessor is responsible in evaluating an input string to produce a translation unit
-//! (GLSL code). The preprocessor _recognizes_ several CPP directives and, among them, _interprets_
-//! some:
-//!
-//! - Not interpreted:
-//!   - `#include`.
-//!   - `#line`.
-//!   - `#pragma`.
-//!   - `#version`.
-//!   - `#extension`.
-//! - Interpreted:
-//!   - `#define`, `#undef`.
-//!   - `#if`, `#ifdef`, `#ifndef`, `#elseif`, `#else`, `#endif`.
-//!
-//! Non-interpreted CPP directives are meaningful for the rest of the parsing, lexing and
-//! compilation stages, thus they are passed along with the rest of the input. It’s especially
-//! important for `#include`, for instance — that is not officially recognized by the GLSL
-//! preprocessor but can has a wide spread usage. You will be required to resolve those includes by
-//! yourself, as it’s not in the scope of this crate.
+//! The preprocessor is responsible in evaluating an input string to produce a preprocessed output
+//! string. The preprocessor recognize directives as well as built-ins (such as `defined`,
+//! `___FILE__`, `__LINE__`, etc.).
 
 mod parser;
 
