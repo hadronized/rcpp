@@ -53,11 +53,14 @@ where
         // special case for \, as it marks a line break if the next character is a \n; in this
         // case, we have to peek the next caracter and ensure it’s a \n
         self.chars.peek().cloned().and_then(|c| match c {
-          '\n' => self.char(),
+          '\n' => {
+            let _ = self.chars.next();
+            self.char()
+          }
 
           _ => {
             self.advance_state(c);
-            Some(c)
+            Some('\\')
           }
         })
       }
@@ -188,5 +191,16 @@ mod tests {
     assert_eq!(parser.char(), None);
     assert_eq!(parser.col(), 2);
     assert_eq!(parser.line(), 3);
+  }
+
+  #[test]
+  fn multiline() {
+    let mut parser = Parser::new("a\\\nb\\ ");
+
+    assert_eq!(parser.char(), Some('a'));
+    assert_eq!(parser.char(), Some('b'));
+    assert_eq!(parser.char(), Some('\\'));
+    assert_eq!(parser.char(), Some(' '));
+    assert_eq!(parser.char(), None);
   }
 }
